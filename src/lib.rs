@@ -9,15 +9,15 @@
 //!
 //! daemonize is a library for writing system daemons. Inspired by the Python library [thesharp/daemonize](https://github.com/thesharp/daemonize).
 //!
-//! The respository is located at https://github.com/knsd/daemonize/.
+//! The respository is located at https://github.com/jan-schreib/daemonize/.
 //!
 //! Usage example:
 //!
 //! ```
 //! #[macro_use] extern crate log;
-//! extern crate daemonize;
+//! extern crate daemonizer;
 //!
-//! use daemonize::{Daemonize};
+//! use daemonizer::{Daemonize};
 //!
 //! fn main() {
 //!     let daemonize = Daemonize::new()

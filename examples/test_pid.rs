@@ -1,6 +1,6 @@
-extern crate daemonize;
+extern crate daemonizer;
 
-use daemonize::{Daemonize};
+use daemonizer::{Daemonize};
 
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();

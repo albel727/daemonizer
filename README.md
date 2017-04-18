@@ -4,15 +4,15 @@ daemonize [![Build Status](https://travis-ci.org/knsd/daemonize.svg?branch=maste
 
 daemonize is a library for writing system daemons. Inspired by the Python library [thesharp/daemonize](https://github.com/thesharp/daemonize).
 
-The documentation is located at http://knsd.github.io/daemonize/.
+The documentation is located at http://jan-schreib.github.io/daemonize/.
 
 Usage example:
 
 ```rust
 #[macro_use] extern crate log;
-extern crate daemonize;
+extern crate daemonizer;
 
-use daemonize::{Daemonize};
+use daemonizer::{Daemonize};
 
 fn main() {
     let daemonize = Daemonize::new()

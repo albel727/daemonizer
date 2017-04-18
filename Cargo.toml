@@ -1,13 +1,13 @@
 [package]
-name = "daemonize"
+name = "daemonizer"
 version = "0.2.4"
 license = "MIT/Apache-2.0"
 authors = ["Fedor Gogolev <knsd@knsd.net>", "Jan S. <jan-schreib@gmail.com>"]
-repository = "https://github.com/jan-schreib/daemonize"
-documentation = "http://jan-schreib.github.io/daemonize"
+repository = "https://github.com/jan-schreib/daemonizer"
+documentation = "http://jan-schreib.github.io/daemonizer"
 readme = "README.md"
 description = "Library to enable your code run as a daemon process on Unix-like systems."
-keywords = ["daemon", "daemonize", "unix"]
+keywords = ["daemon", "daemonize", "daemonizer", "unix"]
 
 [dependencies]
 libc = "0.2.4"

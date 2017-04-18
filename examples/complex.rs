@@ -1,8 +1,8 @@
-extern crate daemonize;
+extern crate daemonizer;
 extern crate syslog;
 #[macro_use] extern crate log;
 
-use daemonize::{Daemonize};
+use daemonizer::{Daemonize};
 
 fn main() {
     syslog::init(syslog::Facility::LOG_USER, log::LogLevelFilter::Debug, Some("daemon-name")).unwrap();
