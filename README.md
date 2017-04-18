@@ -4,7 +4,7 @@ daemonize [![Build Status](https://travis-ci.org/knsd/daemonize.svg?branch=maste
 
 daemonize is a library for writing system daemons. Inspired by the Python library [thesharp/daemonize](https://github.com/thesharp/daemonize).
 
-The documentation is located at http://jan-schreib.github.io/daemonize/.
+The documentation is located at http://jan-schreib.github.io/daemonizer/.
 
 Usage example:
 
