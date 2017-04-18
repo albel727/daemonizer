@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `daemonize` crate.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, daemonize">
+    <meta name="description" content="API documentation for the Rust `daemonizer` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, daemonizer">
 
-    <title>daemonize - Rust</title>
+    <title>daemonizer - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../normalize.css">
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'></p><script>window.sidebarCurrent = {name: 'daemonize', ty: 'mod', relpath: '../'};</script>
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'daemonizer', ty: 'mod', relpath: '../'};</script>
     </nav>
 
     <nav class="sub">
@@ -44,11 +44,11 @@
     </nav>
 
     <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>daemonize</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>daemonizer</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/daemonize/lib.rs.html#9-443' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/daemonizer/lib.rs.html#9-443' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>daemonize is a library for writing system daemons. Inspired by the Python library <a href="https://github.com/thesharp/daemonize">thesharp/daemonize</a>.</p>
 
 <p>The respository is located at <a href="https://github.com/jan-schreib/daemonize/">https://github.com/jan-schreib/daemonize/</a>.</p>
@@ -57,9 +57,9 @@
 
 <pre class='rust rust-example-rendered'>
 <span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>log</span>;
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>daemonize</span>;
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>daemonizer</span>;
 
-<span class='kw'>use</span> <span class='ident'>daemonize</span>::{<span class='ident'>Daemonize</span>};
+<span class='kw'>use</span> <span class='ident'>daemonizer</span>::{<span class='ident'>Daemonize</span>};
 
 <span class='kw'>fn</span> <span class='ident'>main</span>() {
     <span class='kw'>let</span> <span class='ident'>daemonize</span> <span class='op'>=</span> <span class='ident'>Daemonize</span>::<span class='ident'>new</span>()
@@ -81,7 +81,7 @@
 <table>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.Daemonize.html'
-                                  title='daemonize::Daemonize'>Daemonize</a></td>
+                                  title='daemonizer::Daemonize'>Daemonize</a></td>
                            <td class='docblock-short'>
                                 <p>Daemonization options.</p>
                            </td>
@@ -89,21 +89,21 @@
 <table>
                        <tr class=' module-item'>
                            <td><a class='enum' href='enum.DaemonizeError.html'
-                                  title='daemonize::DaemonizeError'>DaemonizeError</a></td>
+                                  title='daemonizer::DaemonizeError'>DaemonizeError</a></td>
                            <td class='docblock-short'>
                                 <p>This error type for <code>Daemonize</code> <code>start</code> method.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='enum' href='enum.Group.html'
-                                  title='daemonize::Group'>Group</a></td>
+                                  title='daemonizer::Group'>Group</a></td>
                            <td class='docblock-short'>
                                 <p>Expects system group id or name. If name is provided it will be resolved to id later.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='enum' href='enum.User.html'
-                                  title='daemonize::User'>User</a></td>
+                                  title='daemonizer::User'>User</a></td>
                            <td class='docblock-short'>
                                 <p>Expects system user id or name. If name is provided it will be resolved to id later.</p>
                            </td>
@@ -111,28 +111,28 @@
 <table>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.Errno.html'
-                                  title='daemonize::Errno'>Errno</a></td>
+                                  title='daemonizer::Errno'>Errno</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.gid_t.html'
-                                  title='daemonize::gid_t'>gid_t</a></td>
+                                  title='daemonizer::gid_t'>gid_t</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.mode_t.html'
-                                  title='daemonize::mode_t'>mode_t</a></td>
+                                  title='daemonizer::mode_t'>mode_t</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
                            <td><a class='type' href='type.uid_t.html'
-                                  title='daemonize::uid_t'>uid_t</a></td>
+                                  title='daemonizer::uid_t'>uid_t</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
@@ -191,7 +191,7 @@
 
     <script>
         window.rootPath = "../";
-        window.currentCrate = "daemonize";
+        window.currentCrate = "daemonizer";
     </script>
     <script src="../jquery.js"></script>
     <script src="../main.js"></script>
