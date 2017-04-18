@@ -1,4 +1,5 @@
 (function() {var implementors = {};
+implementors["daemonize"] = [];
 implementors["libc"] = [];
 
             if (window.register_implementors) {
