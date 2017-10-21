@@ -54,7 +54,7 @@ use std::path::{Path, PathBuf};
 use std::process::{exit};
 
 pub use libc::{uid_t, gid_t, mode_t};
-use libc::{LOCK_EX, LOCK_NB, c_int, fopen, write, close, fileno, fork, getpid, setsid, setuid, setgid, dup2, umask};
+use libc::{LOCK_EX, LOCK_NB, c_int, open, write, close, fork, getpid, setsid, setuid, setgid, dup2, umask};
 
 use self::ffi::{errno, flock, get_gid_by_name, get_uid_by_name};
 
@@ -384,27 +384,16 @@ unsafe fn set_sid() -> Result<()> {
 unsafe fn redirect_standard_streams(stdin_fd: Option<RawFd>,
                                     stdout_fd: Option<RawFd>,
                                     stderr_fd: Option<RawFd>) -> Result<()> {
-    macro_rules! for_every_stream {
-        ($expr:expr) => (
-            for stream in &[libc::STDIN_FILENO, libc::STDOUT_FILENO, libc::STDERR_FILENO] {
-                tryret!($expr(*stream), (), DaemonizeError::RedirectStreams);
-            }
-        )
-    }
-    for_every_stream!(close);
 
-    let devnull_file = fopen(transmute(b"/dev/null\0"), transmute(b"w+\0"));
-    if devnull_file.is_null() {
-        return Err(DaemonizeError::RedirectStreams(errno()))
+    let devnull_fd = open(b"/dev/null\0".as_ptr() as *const _ as *const libc::c_char, libc::O_RDWR);
+    if -1 == devnull_fd {
+        return Err(DaemonizeError::RedirectStreams(errno()));
     };
 
-    let devnull_fd = fileno(devnull_file);
+    for &(fd_from, fd_to) in &[(stdin_fd, libc::STDIN_FILENO), (stdout_fd, libc::STDOUT_FILENO), (stderr_fd, libc::STDERR_FILENO)] {
+        tryret!(dup2(fd_from.unwrap_or(devnull_fd), fd_to), (), DaemonizeError::RedirectStreams);
+    }
 
-    dup2(match stdin_fd { Some(fd) => fd, None => devnull_fd }, libc::STDIN_FILENO);
-    dup2(match stdout_fd { Some(fd) => fd, None => devnull_fd }, libc::STDOUT_FILENO);
-    dup2(match stderr_fd { Some(fd) => fd, None => devnull_fd }, libc::STDERR_FILENO);
-
-    for_every_stream!(|stream| dup2(devnull_fd, stream));
     tryret!(close(devnull_fd), (), DaemonizeError::RedirectStreams);
 
     Ok(())
@@ -447,12 +436,11 @@ unsafe fn set_user(user: uid_t) -> Result<()> {
 unsafe fn create_pid_file(path: PathBuf) -> Result<libc::c_int> {
     let path_c = try!(pathbuf_into_cstring(path));
 
-    let f = fopen(path_c.as_ptr(), b"w" as *const u8 as *const libc::c_char);
-    if f.is_null() {
+    let fd = open(path_c.as_ptr(), libc::O_WRONLY | libc::O_CREAT | libc::O_TRUNC, libc::S_IRUSR | libc::S_IWUSR | libc::S_IRGRP | libc::S_IWGRP | libc::S_IROTH | libc::S_IWOTH);
+    if -1 == fd {
         return Err(DaemonizeError::OpenPidfile)
     }
 
-    let fd = fileno(f);
     tryret!(flock(fd, LOCK_EX | LOCK_NB), Ok(fd), DaemonizeError::LockPidfile)
 }
 
