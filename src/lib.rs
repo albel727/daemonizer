@@ -202,7 +202,7 @@ impl From<gid_t> for Group {
 ///   * redirect standard streams to provided file descriptors.
 ///
 pub struct Daemonize<T> {
-    directory: PathBuf,
+    directory: Option<PathBuf>,
     pid_file: Option<PathBuf>,
     chown_pid_file: bool,
     user: Option<User>,
@@ -234,7 +234,7 @@ impl Daemonize<()> {
 
     pub fn new() -> Self {
         Daemonize {
-            directory: Path::new("/").to_owned(),
+            directory: Some(Path::new("/").to_owned()),
             pid_file: None,
             chown_pid_file: false,
             user: None,
@@ -264,7 +264,13 @@ impl<T> Daemonize<T> {
 
     /// Change working directory to `path` or `/` by default.
     pub fn working_directory<F: AsRef<Path>>(mut self, path: F) -> Self {
-        self.directory = path.as_ref().to_owned();
+        self.directory = Some(path.as_ref().to_owned());
+        self
+    }
+
+    /// Do not change working directory to `/`.
+    pub fn keep_working_directory(mut self) -> Self {
+        self.directory = None;
         self
     }
 
@@ -330,7 +336,9 @@ impl<T> Daemonize<T> {
 
             try!(perform_fork());
 
-            try!(set_current_dir(self.directory).map_err(|_| DaemonizeError::ChangeDirectory));
+            if let Some(directory) = self.directory {
+                try!(set_current_dir(directory).map_err(|_| DaemonizeError::ChangeDirectory));
+            }
             try!(set_sid());
             umask(self.umask);
 
