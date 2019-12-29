@@ -208,7 +208,7 @@ pub struct Daemonize<T> {
     user: Option<User>,
     group: Option<Group>,
     umask: mode_t,
-    privileged_action: Box<Fn() -> T>,
+    privileged_action: Box<dyn Fn() -> T>,
     stdin_fd: Option<RawFd>,
     stdout_fd: Option<RawFd>,
     stderr_fd: Option<RawFd>,
