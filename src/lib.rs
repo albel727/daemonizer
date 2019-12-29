@@ -334,17 +334,17 @@ impl<T> Daemonize<T> {
         unsafe {
             let pid_file_fd = maptry!(self.pid_file.clone(), create_pid_file);
 
-            try!(perform_fork());
+            perform_fork()?;
 
             if let Some(directory) = self.directory {
-                try!(set_current_dir(directory).map_err(|_| DaemonizeError::ChangeDirectory));
+                set_current_dir(directory).map_err(|_| DaemonizeError::ChangeDirectory)?;
             }
-            try!(set_sid());
+            set_sid()?;
             umask(self.umask);
 
-            try!(perform_fork());
+            perform_fork()?;
 
-            try!(redirect_standard_streams(self.stdin_fd, self.stdout_fd, self.stderr_fd));
+            redirect_standard_streams(self.stdin_fd, self.stdout_fd, self.stderr_fd)?;
 
             let uid = maptry!(self.user, get_user);
             let gid = maptry!(self.group, get_group);
@@ -411,7 +411,7 @@ unsafe fn get_group(group: Group) -> Result<gid_t> {
     match group {
         Group::Id(id) => Ok(id),
         Group::Name(name) => {
-            let s = try!(CString::new(name).map_err(|_| DaemonizeError::GroupContainsNul));
+            let s = CString::new(name).map_err(|_| DaemonizeError::GroupContainsNul)?;
             match get_gid_by_name(&s) {
                 Some(id) => get_group(Group::Id(id)),
                 None => Err(DaemonizeError::GroupNotFound)
@@ -428,7 +428,7 @@ unsafe fn get_user(user: User) -> Result<uid_t> {
     match user {
         User::Id(id) => Ok(id),
         User::Name(name) => {
-            let s = try!(CString::new(name).map_err(|_| DaemonizeError::UserContainsNul));
+            let s = CString::new(name).map_err(|_| DaemonizeError::UserContainsNul)?;
             match get_uid_by_name(&s) {
                 Some(id) => get_user(User::Id(id)),
                 None => Err(DaemonizeError::UserNotFound)
@@ -442,7 +442,7 @@ unsafe fn set_user(user: uid_t) -> Result<()> {
 }
 
 unsafe fn create_pid_file(path: PathBuf) -> Result<libc::c_int> {
-    let path_c = try!(pathbuf_into_cstring(path));
+    let path_c = pathbuf_into_cstring(path)?;
 
     let fd = open(path_c.as_ptr(), libc::O_WRONLY | libc::O_CREAT | libc::O_TRUNC, libc::S_IRUSR | libc::S_IWUSR | libc::S_IRGRP | libc::S_IWGRP | libc::S_IROTH | libc::S_IWOTH);
     if -1 == fd {
@@ -453,7 +453,7 @@ unsafe fn create_pid_file(path: PathBuf) -> Result<libc::c_int> {
 }
 
 unsafe fn chown_pid_file(path: PathBuf, uid: uid_t, gid: gid_t) -> Result<()> {
-    let path_c = try!(pathbuf_into_cstring(path));
+    let path_c = pathbuf_into_cstring(path)?;
     tryret!(libc::chown(path_c.as_ptr(), uid, gid), Ok(()), DaemonizeError::ChownPidfile)
 }
 
